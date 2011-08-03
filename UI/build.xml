@@ -335,7 +335,7 @@
         <copydir forceoverwrite="true" src="project_properties_for_release_build" dest="dist/LWUIT_1_5/apps"  excludes=".svn" />
         <delete dir="dist/LWUIT_1_5" includes="**/*.db" />
         <delete dir="dist/LWUIT_1_5/LWUITDemo/nbproject/private" />
-        <zip basedir="dist" file="dist/LWUIT_Release_${tstamp}.zip" include="LWUIT_1_5/**"/>
+        <zip basedir="dist" file="dist/LWUIT_Release_${tstamp}.zip" includes="LWUIT_1_5/**"/>
     </target>
 
 </project>
