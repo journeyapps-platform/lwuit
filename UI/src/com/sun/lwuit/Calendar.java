@@ -437,7 +437,7 @@ public class Calendar extends Container {
                     }
                     int previousMonthSunday = cal.get(java.util.Calendar.DAY_OF_MONTH);
                     for (; i <= lastDay - previousMonthSunday; i++) {
-                        buttons[i].setUIID("CAlendarDay");
+                        buttons[i].setUIID("CalendarDay");
                         buttons[i].setEnabled(false);
                         buttons[i].setText("" + (previousMonthSunday + i));
                     }

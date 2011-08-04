@@ -272,6 +272,18 @@ public class UIManager {
 
         if(installedTheme == null || !installedTheme.containsKey("CalendarSelectedDay.derive")) {
             themeProps.put("CalendarSelectedDay.border", Border.getDefaultBorder());
+            themeProps.put("CalendarSelectedDay.align", centerAlign);
+        }
+        themeProps.put("CalendarSelectedDay.sel#derive", "CalendarSelectedDay");
+
+        if(installedTheme == null || !installedTheme.containsKey("CalendarDay.derive")) {
+            themeProps.put("CalendarDay.align", centerAlign);
+        }
+        themeProps.put("CalendarDay.dis#derive", "CalendarDay");
+        themeProps.put("CalendarDay.press#derive", "CalendarDay");
+
+        if(installedTheme == null || !installedTheme.containsKey("CalendarDay.sel#derive")) {
+            themeProps.put("CalendarDay.sel#align", centerAlign);
         }
 
         if(installedTheme == null || !installedTheme.containsKey("ComboBox.derive")) {
