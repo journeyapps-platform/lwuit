@@ -327,11 +327,11 @@
         <tstamp>
             <format property="tstamp" pattern="yyyyMMdd" />
         </tstamp>
-        <copydir src="../Apps/LWUITDemo" dest="dist/LWUIT_1_5/apps/LWUITDemo"  excludes=".svn,**/build/**,**/Android/**" />
-        <copydir src="../Apps/Makeover" dest="dist/LWUIT_1_5/apps/Makeover"  excludes=".svn,**/build/**" />
-        <copydir src="../Apps/Browser" dest="dist/LWUIT_1_5/apps/Browser"  excludes=".svn,**/build/**" />
-        <copydir src="../Apps/TimeZone" dest="dist/LWUIT_1_5/apps/TimeZone"  excludes=".svn,**/build/**,**/Android/**" />
-        <copydir src="../Apps/Tipster" dest="dist/LWUIT_1_5/apps/Tipster"  excludes=".svn,**/build/**,**/Android/**" />
+        <copydir src="../Apps/LWUITDemo" dest="dist/LWUIT_1_5/apps/LWUITDemo"  excludes=".svn,**/build/**,**/Android/**,**/dist/**" />
+        <copydir src="../Apps/Makeover" dest="dist/LWUIT_1_5/apps/Makeover"  excludes=".svn,**/build/**,**/dist/**" />
+        <copydir src="../Apps/Browser" dest="dist/LWUIT_1_5/apps/Browser"  excludes=".svn,**/build/**,**/dist**" />
+        <copydir src="../Apps/TimeZone" dest="dist/LWUIT_1_5/apps/TimeZone"  excludes=".svn,**/build/**,**/Android/**,**/dist**" />
+        <copydir src="../Apps/Tipster" dest="dist/LWUIT_1_5/apps/Tipster"  excludes=".svn,**/build/**,**/Android/**,**/dist**" />
         <copydir forceoverwrite="true" src="project_properties_for_release_build" dest="dist/LWUIT_1_5/apps"  excludes=".svn" />
         <delete dir="dist/LWUIT_1_5" includes="**/*.db" />
         <delete dir="dist/LWUIT_1_5/LWUITDemo/nbproject/private" />
