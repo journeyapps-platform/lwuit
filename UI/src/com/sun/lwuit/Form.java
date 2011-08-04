@@ -1584,7 +1584,7 @@ public class Form extends Container {
         } else {
             initFocused();
             if(focused == null) {
-                contentPane.moveScrollTowards(game, null);
+                getContentPane().moveScrollTowards(game, null);
                 return;
             }
         }
