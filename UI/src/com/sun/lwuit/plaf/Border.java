@@ -1244,6 +1244,11 @@ public class Border {
                 Image left = images[0];
                 Image right = images[1];
                 Image center = images[2];
+
+                if(UIManager.getInstance().isThemeConstant("centerAlignHBorderBool", false)) {
+                    y += Math.max(0, height / 2 - center.getHeight() / 2);
+                }
+
                 g.drawImage(left, x, y);
                 g.drawImage(right, x + width - right.getWidth(), y);
                 x += left.getWidth();

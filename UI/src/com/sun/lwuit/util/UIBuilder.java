@@ -1941,6 +1941,9 @@ public class UIBuilder {
     }
 
     private void showForm(Form f, Command sourceCommand, Component sourceComponent) {
+        if(Display.getInstance().getCurrent() instanceof Dialog) {
+            ((Dialog)Display.getInstance().getCurrent()).dispose();
+        }
         Vector formNavigationStack = baseFormNavigationStack;
         if(sourceCommand != null && Display.getInstance().getCurrent().getBackCommand() == sourceCommand) {
             Form currentForm = Display.getInstance().getCurrent();
