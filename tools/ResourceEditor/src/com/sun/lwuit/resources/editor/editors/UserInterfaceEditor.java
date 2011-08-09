@@ -2332,7 +2332,12 @@ public class UserInterfaceEditor extends javax.swing.JPanel {
                         if(c.isUiResource()) {
                             UIBuilderOverride u = new UIBuilderOverride(UserInterfaceEditor.this);
                             com.sun.lwuit.Component cmp = u.createContainer(res, c.getType());
-                            addComponentToContainer(cmp, (String)cmp.getClientProperty("TYPE_KEY"));
+                            String t = (String)cmp.getClientProperty(TYPE_KEY);
+                            if(t == null) {
+                                cmp.putClientProperty(TYPE_KEY, c.getType());
+                                t = c.getType();
+                            }
+                            addComponentToContainer(cmp, t);
                             return;
                         }
                         com.sun.lwuit.Component cmp = (com.sun.lwuit.Component)lwuitBaseClass.newInstance();
