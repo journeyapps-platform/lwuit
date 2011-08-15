@@ -24,6 +24,7 @@
 
 package com.sun.lwuit.resources.editor.editors;
 
+import com.sun.lwuit.Display;
 import com.sun.lwuit.resource.util.LWUITComponentWrapper;
 import com.sun.lwuit.resources.editor.PickMIDlet;
 import com.sun.lwuit.resources.editor.ResourceEditorView;
@@ -4933,9 +4934,13 @@ public class UserInterfaceEditor extends javax.swing.JPanel {
     private void previewThemeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previewThemeActionPerformed
         applyThemePreview((String)previewTheme.getSelectedItem());
         Preferences.userNodeForPackage(getClass()).put("ThemeListSelection", (String)previewTheme.getSelectedItem());
-        com.sun.lwuit.Display.getInstance().getCurrent().refreshTheme();
-        com.sun.lwuit.Display.getInstance().getCurrent().revalidate();
-        uiPreview.repaint();
+        Display.getInstance().callSerially(new Runnable() {
+            public void run() {
+                com.sun.lwuit.Display.getInstance().getCurrent().refreshTheme();
+                com.sun.lwuit.Display.getInstance().getCurrent().revalidate();
+                uiPreview.repaint();
+            }
+        });
     }//GEN-LAST:event_previewThemeActionPerformed
 
     private String findUniqueName(String prefix) {
