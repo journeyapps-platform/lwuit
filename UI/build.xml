@@ -314,7 +314,7 @@
         <copy file="../Ports/RIM/UI_RIM/dist/NewOS/UI_RIM.jar" tofile="dist/LWUIT_1_5/lib/LWUIT_Blackberry_4_7_OrNewer.jar" />
         <copy file="../Ports/RIM/UI_RIM/dist/NewOSSigned/UI_RIM.jar" tofile="dist/LWUIT_1_5/lib/LWUIT_Blackberry_4_7_OrNewerSigned.jar" />
         <copy file="../Ports/MIDP/IO_MIDP/dist/IO.jar" tofile="dist/LWUIT_1_5/lib/MIDP_IO.jar" />
-        <copy file="../Ports/RIM/IO_RIM/dist/IO_RIM.jar" tofile="dist/LWUIT_1_5/lib/RIM_IO.jar" />
+        <copy file="../Ports/RIM/IO_RIM/dist/IO.jar" tofile="dist/LWUIT_1_5/lib/RIM_IO.jar" />
         <copy file="../Ports/SE/IO_SE/dist/IO_SE.jar" tofile="dist/LWUIT_1_5/lib/SE_IO.jar" />
         <copy file="../Ports/Nokia/IO_Nokia/dist/IO.jar" tofile="dist/LWUIT_1_5/lib/NOKIA_IO.jar" />
         <copy file="../Ports/CDC_PBP/UI_CDC/dist/UI_CDC.jar" tofile="dist/LWUIT_1_5/lib/LWUIT_CDC_PBP_UI.jar" />
