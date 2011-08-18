@@ -934,33 +934,36 @@ public final class Display {
      */
     public void invokeAndBlock(Runnable r, boolean dropEvents){
         this.dropEvents = dropEvents;
-        if(isEdt()) {
-            // this class allows a runtime exception to propogate correctly out of the
-            // internal thread
-            RunnableWrapper w = new RunnableWrapper(r, 1);
-            RunnableWrapper.pushToThreadPool(w);
+        try {
+            if(isEdt()) {
+                // this class allows a runtime exception to propogate correctly out of the
+                // internal thread
+                RunnableWrapper w = new RunnableWrapper(r, 1);
+                RunnableWrapper.pushToThreadPool(w);
 
-            synchronized(lock) {
-                try {
-                    // yeald the CPU for a very short time to let the invoke thread
-                    // get started
-                    lock.wait(2);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
+                synchronized(lock) {
+                    try {
+                        // yeald the CPU for a very short time to let the invoke thread
+                        // get started
+                        lock.wait(2);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
                 }
+                // loop over the EDT until the thread completes then return
+                while(!w.isDone() && lwuitRunning) {
+                    edtLoopImpl();
+                }
+                // if the thread thew an exception we need to throw it onwards
+                if(w.getErr() != null) {
+                    throw w.getErr();
+                }
+            } else {
+                r.run();
             }
-            // loop over the EDT until the thread completes then return
-            while(!w.isDone() && lwuitRunning) {
-                edtLoopImpl();
-            }
-            // if the thread thew an exception we need to throw it onwards
-            if(w.getErr() != null) {
-                throw w.getErr();
-            }
-        } else {
-            r.run();
+        } finally {
+            this.dropEvents = false;
         }
-        this.dropEvents = false;
     }
 
     /**

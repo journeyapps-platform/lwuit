@@ -118,6 +118,7 @@ public class M3G {
      * and should not make any calls to the 2D pipeline. It is the responsibility
      * of the developer not to open additional threads or try to "abuse" the 2D/3D
      * pipeline separation in any way.
+     * @deprecated this class isn't portable, its functionality will move to an external package in the future
      */
     public static interface Callback {
     }
