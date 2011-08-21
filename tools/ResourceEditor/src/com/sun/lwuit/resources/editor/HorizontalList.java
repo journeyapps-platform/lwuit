@@ -153,7 +153,7 @@ public class HorizontalList extends JPanel {
         button.setRolloverEnabled(true);
         button.setVerticalTextPosition(SwingConstants.BOTTOM);
         button.setHorizontalTextPosition(SwingConstants.CENTER);
-        button.setBorderPainted(false);
+        button.setBorderPainted(ResourceEditorApp.IS_MAC);
         return button;
     }
     

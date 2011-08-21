@@ -26,10 +26,16 @@ package com.sun.lwuit.resources.editor;
 
 import com.sun.lwuit.Display;
 import com.sun.lwuit.io.NetworkManager;
+import com.sun.lwuit.resource.util.QuitAction;
 import java.awt.Image;
+import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.io.File;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.Arrays;
+import javax.swing.ImageIcon;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
@@ -40,12 +46,75 @@ import org.jdesktop.application.SingleFrameApplication;
  */
 public class ResourceEditorApp extends SingleFrameApplication {
     private File fileToLoad;
+    public final static boolean IS_MAC;
+    private static ResourceEditorView ri;
+    
+    static void setMacApplicationEventHandled(Object event, boolean handled) {
+        if (event != null) {
+            try {
+                Method setHandledMethod = event.getClass().getDeclaredMethod("setHandled", new Class[] { boolean.class });
+
+                setHandledMethod.invoke(event, new Object[] { Boolean.valueOf(handled) });
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }    
+    
+
+    static {
+        String n = System.getProperty("os.name");
+        if(n != null && n.startsWith("Mac")) {
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Resource Editor");
+            try {
+                Class applicationClass = Class.forName("com.apple.eawt.Application");
+
+                Object macApp = applicationClass.getConstructor((Class[])null).newInstance((Object[])null);
+
+                Class applicationListenerClass = Class.forName("com.apple.eawt.ApplicationListener");
+
+                Method addListenerMethod = applicationClass.getDeclaredMethod("addApplicationListener", new Class[] { applicationListenerClass });
+                
+                Object proxy = Proxy.newProxyInstance(ResourceEditorApp.class.getClassLoader(), new Class[] { applicationListenerClass }, 
+                        new InvocationHandler() {
+                    public Object invoke(Object o, Method method, Object[] os) throws Throwable {
+                        if(method.getName().equals("handleQuit")) {
+                            setMacApplicationEventHandled(os[0], true);
+                            QuitAction.INSTANCE.quit();
+                            return null;
+                        }
+                        if(method.getName().equals("handleAbout")) {
+                            setMacApplicationEventHandled(os[0], true);
+                            ri.aboutActionPerformed();
+                            return null;
+                        }
+                        return null;
+                    }
+                });
+
+                addListenerMethod.invoke(macApp, new Object[] { proxy });
+                
+                Method enableAboutMethod = applicationClass.getDeclaredMethod("setEnabledAboutMenu", new Class[] { boolean.class });
+                enableAboutMethod.invoke(macApp, new Object[] { Boolean.TRUE });
+                //ImageIcon i = new ImageIcon("/application64.png");
+                //Method setDockIconImage = applicationClass.getDeclaredMethod("setDockIconImage", new Class[] { java.awt.Image.class });
+                //setDockIconImage.invoke(macApp, new Object[] { i.getImage() });
+            } catch(Throwable t) {
+                t.printStackTrace();
+            }
+            IS_MAC = true;
+        } else {
+            IS_MAC = false;
+        }
+    }
         
     /**
      * At startup create and show the main frame of the application.
      */
     @Override protected void startup() {
-        show(new ResourceEditorView(this, fileToLoad));
+        ri = new ResourceEditorView(this, fileToLoad);
+        show(ri);
         Image large = Toolkit.getDefaultToolkit().createImage(getClass().getResource("/application64.png"));
         Image small = Toolkit.getDefaultToolkit().createImage(getClass().getResource("/application48.png"));
         try {

@@ -50,6 +50,7 @@ import com.sun.lwuit.impl.swing.SVG;
 import com.sun.lwuit.plaf.Border;
 import com.sun.lwuit.plaf.Accessor;
 import com.sun.lwuit.plaf.Style;
+import com.sun.lwuit.resources.editor.ResourceEditorApp;
 import java.awt.Frame;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -67,6 +68,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.event.TreeModelEvent;
@@ -135,6 +137,7 @@ public class EditableResources extends Resources implements TreeModel {
             previouslyModified = modified;
             String selection = performAction();
             modified = true;
+            updateModified();
             if(onChange != null) {
                 onChange.run();
             }
@@ -144,6 +147,7 @@ public class EditableResources extends Resources implements TreeModel {
         public final String undoAction() {
             String selection = performUndo();
             modified = previouslyModified;
+            updateModified();
             if(onChange != null) {
                 onChange.run();
             }
@@ -281,6 +285,7 @@ public class EditableResources extends Resources implements TreeModel {
         for(String name : getResourceNames()) {
             setResource(name, getResourceType(name), null);
         }
+        updateModified();
     }
 
 
@@ -362,6 +367,7 @@ public class EditableResources extends Resources implements TreeModel {
         }*/
         loadingMode = false;
         modified = false;
+        updateModified();
         undoQueue.clear();
         redoQueue.clear();
         
@@ -413,8 +419,23 @@ public class EditableResources extends Resources implements TreeModel {
         return modified;
     }
 
+    private void updateModified() {
+        if(ResourceEditorApp.IS_MAC) {
+            for(java.awt.Window w : java.awt.Frame.getWindows()) {
+                if(w instanceof JFrame) {
+                    if(modified) {
+                        ((JFrame)w).getRootPane().putClientProperty("Window.documentModified", Boolean.TRUE);
+                    } else {
+                        ((JFrame)w).getRootPane().putClientProperty("Window.documentModified", Boolean.FALSE);
+                    }
+                }
+            }
+        }
+    }
+    
     public void setModified() {
         this.modified = true;
+        updateModified();
     }
     
     public byte[] getDataByteArray(String id) {
@@ -578,6 +599,7 @@ public class EditableResources extends Resources implements TreeModel {
             }
         }
         modified = false;
+        updateModified();
         undoQueue.clear();
         redoQueue.clear();
     }

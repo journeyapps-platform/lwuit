@@ -106,6 +106,17 @@ public class QuitAction extends AbstractAction implements WindowListener {
         
         frm.validate();
     }
+    
+    public boolean quit() {
+        if(res != null && res.isModified()) {
+            if(JOptionPane.showConfirmDialog(ResourceEditorApp.getApplication().getMainFrame(), "File was modified, do you want to exit without saving?", 
+                "Exit", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+                return false;
+            }
+        }
+        System.exit(0);
+        return true;
+    }
 
     public void actionPerformed(ActionEvent e) {
         if(res != null && res.isModified()) {

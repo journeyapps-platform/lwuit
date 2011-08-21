@@ -3036,7 +3036,12 @@ public class UserInterfaceEditor extends javax.swing.JPanel {
                             if(result[i] == null) {
                                 out.writeUTF("");
                             } else {
-                                out.writeUTF(res.findId(result[i]));
+                                String id = res.findId(result[i]);
+                                if(id == null) {
+                                   out.writeUTF("");
+                                } else {
+                                   out.writeUTF(id);
+                                }
                             }
                         }
                         continue;

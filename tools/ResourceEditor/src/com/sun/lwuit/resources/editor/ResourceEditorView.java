@@ -66,6 +66,7 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -81,6 +82,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -175,6 +179,12 @@ public class ResourceEditorView extends FrameView {
         ToolTipManager.sharedInstance().setDismissDelay(10000);
         QuitAction.INSTANCE.setResource(loadedResources);
         initComponents();
+        if(ResourceEditorApp.IS_MAC) {
+            fileMenu.remove(exitMenuItem);
+            fileMenu.remove(jSeparator1);
+            helpMenu.remove(jSeparator8);
+            helpMenu.remove(about);
+        }
         
         themeList = new HorizontalList(loadedResources, this);
         imageList = new HorizontalList(loadedResources, this, 40) {
@@ -397,6 +407,7 @@ public class ResourceEditorView extends FrameView {
         } else {
             loadedResources.clear();
             loadedFile = null;
+            updateLoadedFile();
             getFrame().setTitle("Untitled - Resource Editor");
         }
         //animationScroll.getViewport().setOpaque(false);
@@ -593,6 +604,17 @@ public class ResourceEditorView extends FrameView {
         Preferences.userNodeForPackage(getClass()).put("recentFiles", recentFileString);
     }
     
+    
+    private void updateLoadedFile() {
+        if(ResourceEditorApp.IS_MAC) {
+            for(java.awt.Window w : java.awt.Frame.getWindows()) {
+                if(w instanceof JFrame) {
+                    ((JFrame)w).getRootPane().putClientProperty("Window.documentFile", loadedFile);
+                }
+            }
+        }
+    }
+    
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -650,7 +672,7 @@ public class ResourceEditorView extends FrameView {
         jSeparator3 = new javax.swing.JSeparator();
         jToolBar1 = new javax.swing.JToolBar();
         menuBar = new javax.swing.JMenuBar();
-        javax.swing.JMenu fileMenu = new javax.swing.JMenu();
+        fileMenu = new javax.swing.JMenu();
         newMenuItem = new javax.swing.JMenuItem();
         openMenuItem = new javax.swing.JMenuItem();
         recentMenu = new javax.swing.JMenu();
@@ -661,7 +683,7 @@ public class ResourceEditorView extends FrameView {
         exportRes = new javax.swing.JMenuItem();
         setupNetbeans = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JSeparator();
-        javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
+        exitMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         renameItem = new javax.swing.JMenuItem();
         duplicateItem = new javax.swing.JMenuItem();
@@ -699,7 +721,7 @@ public class ResourceEditorView extends FrameView {
         jSeparator6 = new javax.swing.JSeparator();
         checkerboardColors = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JSeparator();
-        javax.swing.JMenu helpMenu = new javax.swing.JMenu();
+        helpMenu = new javax.swing.JMenu();
         introductionAndWalkthroughTutorial = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
         howDoIChangeTheLookOfAComponent = new javax.swing.JMenuItem();
@@ -773,12 +795,12 @@ public class ResourceEditorView extends FrameView {
             themePanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, themePanelLayout.createSequentialGroup()
                 .add(jLabel2)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 49, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(addTheme)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(removeTheme)
                 .add(1, 1, 1))
-            .add(themeScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+            .add(themeScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
         );
 
         themePanelLayout.linkSize(new java.awt.Component[] {addTheme, removeTheme}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
@@ -791,7 +813,7 @@ public class ResourceEditorView extends FrameView {
                     .add(removeTheme)
                     .add(addTheme))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(themeScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE))
+                .add(themeScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("", new javax.swing.ImageIcon(getClass().getResource("/com/sun/lwuit/resources/editor/resources/theme.png")), themePanel, "Themes"); // NOI18N
@@ -851,8 +873,8 @@ public class ResourceEditorView extends FrameView {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(removeImage)
                 .addContainerGap())
-            .add(imageFinderCombo, 0, 195, Short.MAX_VALUE)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, imageTabs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+            .add(imageFinderCombo, 0, 290, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, imageTabs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
         );
 
         jPanel2Layout.linkSize(new java.awt.Component[] {addImage, removeImage}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
@@ -867,7 +889,7 @@ public class ResourceEditorView extends FrameView {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(imageFinderCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(imageTabs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE))
+                .add(imageTabs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE))
         );
 
         jPanel2Layout.linkSize(new java.awt.Component[] {addImage, removeImage}, org.jdesktop.layout.GroupLayout.VERTICAL);
@@ -905,12 +927,12 @@ public class ResourceEditorView extends FrameView {
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel4Layout.createSequentialGroup()
                 .add(jLabel5)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 59, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(addFont)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(removeFont)
                 .add(1, 1, 1))
-            .add(fontsScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+            .add(fontsScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
         );
 
         jPanel4Layout.linkSize(new java.awt.Component[] {addFont, removeFont}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
@@ -923,7 +945,7 @@ public class ResourceEditorView extends FrameView {
                     .add(removeFont)
                     .add(addFont))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(fontsScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE))
+                .add(fontsScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("", new javax.swing.ImageIcon(getClass().getResource("/com/sun/lwuit/resources/editor/resources/font.png")), jPanel4, "Fonts"); // NOI18N
@@ -960,11 +982,11 @@ public class ResourceEditorView extends FrameView {
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
                 .add(jLabel6)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 63, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(addL10N)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(removeL10N))
-            .add(localizationScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+            .add(localizationScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
         );
 
         jPanel5Layout.linkSize(new java.awt.Component[] {addL10N, removeL10N}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
@@ -977,7 +999,7 @@ public class ResourceEditorView extends FrameView {
                     .add(removeL10N)
                     .add(addL10N))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(localizationScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE))
+                .add(localizationScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("", new javax.swing.ImageIcon(getClass().getResource("/com/sun/lwuit/resources/editor/resources/localization.png")), jPanel5, "Localization"); // NOI18N
@@ -1013,11 +1035,11 @@ public class ResourceEditorView extends FrameView {
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel6Layout.createSequentialGroup()
                 .add(jLabel7)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 64, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(addData)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(removeData))
-            .add(dataScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+            .add(dataScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
         );
 
         jPanel6Layout.linkSize(new java.awt.Component[] {addData, removeData}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
@@ -1030,7 +1052,7 @@ public class ResourceEditorView extends FrameView {
                     .add(addData)
                     .add(removeData))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(dataScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE))
+                .add(dataScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("", new javax.swing.ImageIcon(getClass().getResource("/com/sun/lwuit/resources/editor/resources/database.png")), jPanel6, "Data"); // NOI18N
@@ -1062,12 +1084,12 @@ public class ResourceEditorView extends FrameView {
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jLabel4)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 60, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(addUserInterface)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(removeUserInterface)
                 .addContainerGap())
-            .add(userInterfaceScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+            .add(userInterfaceScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1077,7 +1099,7 @@ public class ResourceEditorView extends FrameView {
                     .add(addUserInterface)
                     .add(removeUserInterface))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(userInterfaceScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE))
+                .add(userInterfaceScroll, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("", new javax.swing.ImageIcon(getClass().getResource("/com/sun/lwuit/resources/editor/resources/GUIBuilder.png")), jPanel1, "GUI Builder"); // NOI18N
@@ -1096,14 +1118,14 @@ public class ResourceEditorView extends FrameView {
                 .addContainerGap()
                 .add(iconWidth, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 80, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(iconHeight, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                .add(iconHeight, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                 .addContainerGap())
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
         );
         treeAreaLayout.setVerticalGroup(
             treeAreaLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, treeAreaLayout.createSequentialGroup()
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(treeAreaLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(iconWidth, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -1191,7 +1213,7 @@ public class ResourceEditorView extends FrameView {
         resPassword.addActionListener(formListener);
         fileMenu.add(resPassword);
 
-        importRes.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        importRes.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.SHIFT_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         importRes.setMnemonic('I');
         importRes.setText("Import");
         importRes.setName("importRes"); // NOI18N
@@ -1224,7 +1246,7 @@ public class ResourceEditorView extends FrameView {
         editMenu.setText("Edit");
         editMenu.setName("editMenu"); // NOI18N
 
-        renameItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        renameItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         renameItem.setMnemonic('R');
         renameItem.setText("Rename");
         renameItem.setName("renameItem"); // NOI18N
@@ -3291,6 +3313,10 @@ private boolean configureOptiPNG() {
         }
     }//GEN-LAST:event_launchOptiPngActionPerformed
 
+    void aboutActionPerformed() {
+        aboutActionPerformed(null);
+    }
+    
     private void aboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutActionPerformed
         new About(mainPanel);
     }//GEN-LAST:event_aboutActionPerformed
@@ -3826,7 +3852,7 @@ public static void openInIDE(File f, int lineNumber) {
             putValue(NAME, "Open");
             putValue(SHORT_DESCRIPTION, "Open");
             putValue(SMALL_ICON, new ImageIcon(getClass().getResource(IMAGE_DIR + "open.png")));
-            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
+            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         }
         
         public void start() {
@@ -3876,6 +3902,7 @@ public static void openInIDE(File f, int lineNumber) {
                     }
                     addToRecentMenu(selection);
                     loadedFile = selection;
+                    updateLoadedFile();
                     Preferences.userNodeForPackage(getClass()).put("lastDir", selection.getParentFile().getAbsolutePath());
                     result = loadedResources;
                     initImagesComboBox(imageFinderCombo, loadedResources, true, false);
@@ -3919,6 +3946,7 @@ public static void openInIDE(File f, int lineNumber) {
 
     void setLoadedFile(File loadedFile) {
         this.loadedFile = loadedFile;
+        updateLoadedFile();
         getFrame().setTitle(loadedFile.getName() + " - Resource Editor");
     }
 
@@ -3929,7 +3957,7 @@ public static void openInIDE(File f, int lineNumber) {
             putValue(NAME, "Save");
             putValue(SHORT_DESCRIPTION, "Save");
             putValue(SMALL_ICON, new ImageIcon(getClass().getResource(IMAGE_DIR + "save.png")));
-            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
+            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         }
         
         public void start() {
@@ -3942,16 +3970,19 @@ public static void openInIDE(File f, int lineNumber) {
                 File[] files = showSaveFileChooser();
                 if(files != null) {
                     loadedFile = files[0];
+                    updateLoadedFile();
                     if(loadedFile.exists()) {
                         if(JOptionPane.showConfirmDialog(mainPanel, "File Already Exists, do you want to overwrite this file?", 
                             "File Exists", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {
                             loadedFile = null;
                             checkFile();
+                            updateLoadedFile();
                             return;
                         }
                     }
                     if(loadedFile.getName().indexOf('.') == -1) {
                         loadedFile = new File(loadedFile.getAbsolutePath() + ".res");
+                        updateLoadedFile();
                     }
                 } else {
                     dialogCanceled = true;
@@ -4046,13 +4077,14 @@ public static void openInIDE(File f, int lineNumber) {
             putValue(NAME, "Save As...");
             putValue(SHORT_DESCRIPTION, "Save As...");
             putValue(SMALL_ICON, new ImageIcon(getClass().getResource(IMAGE_DIR + "saveas_1.png")));
-            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK));
+            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         @Override
         protected void checkFile() {
             loadedFile = null;
             super.checkFile();
+            updateLoadedFile();
         }
     }
 
@@ -4061,7 +4093,7 @@ public static void openInIDE(File f, int lineNumber) {
             putValue(NAME, "Save Copy Without SVG...");
             putValue(SHORT_DESCRIPTION, "Save a Resource Copy Without SVG Files (only fallbacks)");
             putValue(SMALL_ICON, new ImageIcon(getClass().getResource(IMAGE_DIR + "saveas_1.png")));
-            //putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK));
+            //putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_DOWN_MASK));
         }
 
         @Override
@@ -4076,6 +4108,7 @@ public static void openInIDE(File f, int lineNumber) {
                 super.exectute();
 
                 loadedFile = oldLoadedFile;
+                updateLoadedFile();
                 // restore default state and original file name...
                 loadedResources.setIgnoreSVGMode(false);
                 loadedResources.setIgnorePNGMode(pngMode);
@@ -4122,7 +4155,7 @@ public static void openInIDE(File f, int lineNumber) {
             putValue(NAME, "Export...");
             putValue(SHORT_DESCRIPTION, "Export...");
             //putValue(SMALL_ICON, new ImageIcon(getClass().getResource(IMAGE_DIR + "saveas_1.png")));
-            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK | KeyEvent.ALT_DOWN_MASK));
+            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.ALT_DOWN_MASK));
         }
 
         @Override
@@ -4512,7 +4545,7 @@ public static void openInIDE(File f, int lineNumber) {
             putValue(SHORT_DESCRIPTION, "New");
             putValue(DEFAULT, "New");
             putValue(SMALL_ICON, new ImageIcon(getClass().getResource(IMAGE_DIR + "new.png")));
-            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
+            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         }
         
         public void actionPerformed(ActionEvent e) {
@@ -4525,6 +4558,7 @@ public static void openInIDE(File f, int lineNumber) {
             EditableResources.setCurrentPassword("");
             loadedResources.clear();
             loadedFile = null;
+            updateLoadedFile();
             projectGeneratorSettings = null;
             refreshAll();
             getFrame().setTitle("Untitled - Resource Editor");
@@ -4544,7 +4578,7 @@ public static void openInIDE(File f, int lineNumber) {
             putValue(NAME, "Help");
             putValue(SHORT_DESCRIPTION, "Help");
             putValue(SMALL_ICON, new ImageIcon(getClass().getResource(IMAGE_DIR + "help.png")));
-            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F1, KeyEvent.CTRL_DOWN_MASK));
+            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         }
 
         @Override
@@ -4578,7 +4612,7 @@ public static void openInIDE(File f, int lineNumber) {
         public RedoAction() {
             putValue(NAME, "Redo");
             putValue(SHORT_DESCRIPTION, "Redo");
-            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK));
+            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         }
 
         public void actionPerformed(ActionEvent ev) {
@@ -4590,7 +4624,7 @@ public static void openInIDE(File f, int lineNumber) {
         public UndoAction() {
             putValue(NAME, "Undo");
             putValue(SHORT_DESCRIPTION, "Undo");
-            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK));
+            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         }
 
         public void actionPerformed(ActionEvent ev) {
@@ -4634,11 +4668,14 @@ public static void openInIDE(File f, int lineNumber) {
     private javax.swing.JMenuItem developersTutorialPart1;
     private javax.swing.JMenuItem duplicateItem;
     private javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenuItem exportRes;
+    private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuItem findMultiImages;
     private javax.swing.JScrollPane fontsScroll;
     private javax.swing.JMenuItem generateNetbeansProject;
     private javax.swing.JMenuItem helpEntryMenu;
+    private javax.swing.JMenu helpMenu;
     private javax.swing.JMenuItem howDoIChangeTheLookOfAComponent;
     private javax.swing.JMenuItem howDoIGenerateNetbeansProject;
     private javax.swing.JSpinner iconHeight;

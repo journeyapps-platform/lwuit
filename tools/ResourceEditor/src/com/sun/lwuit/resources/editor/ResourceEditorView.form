@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.5">
   <NonVisualComponents>
@@ -46,7 +46,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="iconWidth" min="-2" pref="80" max="-2" attributes="2"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="iconHeight" pref="94" max="32767" attributes="2"/>
+                          <Component id="iconHeight" pref="70" max="32767" attributes="2"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                       <Component id="jTabbedPane1" alignment="1" pref="200" max="32767" attributes="0"/>
@@ -55,7 +55,7 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="jTabbedPane1" pref="395" max="32767" attributes="0"/>
+                          <Component id="jTabbedPane1" pref="381" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="iconWidth" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -100,13 +100,13 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
                                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="49" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Component id="addTheme" linkSize="2" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="removeTheme" linkSize="2" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="themeScroll" alignment="0" pref="195" max="32767" attributes="0"/>
+                              <Component id="themeScroll" alignment="0" pref="235" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -118,7 +118,7 @@
                                       <Component id="addTheme" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="themeScroll" pref="336" max="32767" attributes="0"/>
+                                  <Component id="themeScroll" pref="297" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -203,8 +203,8 @@
                                   <Component id="removeImage" linkSize="14" min="-2" max="-2" attributes="1"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
-                              <Component id="imageFinderCombo" alignment="0" pref="195" max="32767" attributes="0"/>
-                              <Component id="imageTabs" alignment="1" pref="195" max="32767" attributes="0"/>
+                              <Component id="imageFinderCombo" alignment="0" pref="290" max="32767" attributes="0"/>
+                              <Component id="imageTabs" alignment="1" pref="290" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -218,7 +218,7 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="imageFinderCombo" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="imageTabs" pref="310" max="32767" attributes="0"/>
+                                  <Component id="imageTabs" pref="271" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -376,13 +376,13 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="59" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Component id="addFont" linkSize="5" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="removeFont" linkSize="5" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="fontsScroll" alignment="0" pref="195" max="32767" attributes="0"/>
+                              <Component id="fontsScroll" alignment="0" pref="221" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -394,7 +394,7 @@
                                       <Component id="addFont" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="fontsScroll" pref="336" max="32767" attributes="0"/>
+                                  <Component id="fontsScroll" pref="297" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -472,12 +472,12 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="63" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Component id="addL10N" linkSize="6" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="removeL10N" linkSize="6" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="localizationScroll" alignment="0" pref="195" max="32767" attributes="0"/>
+                              <Component id="localizationScroll" alignment="0" pref="218" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -489,7 +489,7 @@
                                       <Component id="addL10N" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="localizationScroll" pref="336" max="32767" attributes="0"/>
+                                  <Component id="localizationScroll" pref="297" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -568,12 +568,12 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="64" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Component id="addData" linkSize="7" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="removeData" linkSize="7" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="dataScroll" alignment="0" pref="195" max="32767" attributes="0"/>
+                              <Component id="dataScroll" alignment="0" pref="214" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -585,7 +585,7 @@
                                       <Component id="removeData" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="dataScroll" pref="336" max="32767" attributes="0"/>
+                                  <Component id="dataScroll" pref="297" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -664,13 +664,13 @@
                               <Group type="102" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="60" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Component id="addUserInterface" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="removeUserInterface" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
-                              <Component id="userInterfaceScroll" alignment="0" pref="195" max="32767" attributes="0"/>
+                              <Component id="userInterfaceScroll" alignment="0" pref="235" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -682,7 +682,7 @@
                                       <Component id="removeUserInterface" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="userInterfaceScroll" pref="336" max="32767" attributes="0"/>
+                                  <Component id="userInterfaceScroll" pref="297" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -848,10 +848,6 @@
             <Property name="text" type="java.lang.String" value="File"/>
             <Property name="name" type="java.lang.String" value="fileMenu" noResource="true"/>
           </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-          </AuxValues>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="newMenuItem">
               <Properties>
@@ -914,8 +910,8 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="importRes">
               <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Shift+Ctrl+I"/>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.SHIFT_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())" type="code"/>
                 </Property>
                 <Property name="mnemonic" type="int" value="73"/>
                 <Property name="text" type="java.lang.String" value="Import"/>
@@ -958,10 +954,6 @@
                 <Property name="text" type="java.lang.String" value="Exit"/>
                 <Property name="name" type="java.lang.String" value="exitMenuItem" noResource="true"/>
               </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-              </AuxValues>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -974,8 +966,8 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="renameItem">
               <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+R"/>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())" type="code"/>
                 </Property>
                 <Property name="mnemonic" type="int" value="82"/>
                 <Property name="text" type="java.lang.String" value="Rename"/>
@@ -1302,10 +1294,6 @@
             <Property name="text" type="java.lang.String" value="Help"/>
             <Property name="name" type="java.lang.String" value="helpMenu" noResource="true"/>
           </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-          </AuxValues>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="introductionAndWalkthroughTutorial">
               <Properties>
