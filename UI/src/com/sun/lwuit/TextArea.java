@@ -536,6 +536,10 @@ public class TextArea extends Component {
     public void pointerHoverReleased(int[] x, int[] y) {
         requestFocus();
     }
+
+    boolean showLightweightVKB() {
+        return false;
+    }
     
     /**
      * @inheritDoc
@@ -548,8 +552,12 @@ public class TextArea extends Component {
             super.pointerReleased(x, y);
             if (isEditable() && isEnabled() && !isCellRenderer()) {
                 if (Display.getInstance().isTouchScreenDevice()) {
-                    if (!Display.getInstance().isVirtualKeyboardShowing()) {
-                        Display.getInstance().setShowVirtualKeyboard(true);
+                    if(showLightweightVKB() || !(Display.getInstance().getDefaultVirtualKeyboard() instanceof Dialog)) {
+                        if (!Display.getInstance().isVirtualKeyboardShowing()) {
+                            Display.getInstance().setShowVirtualKeyboard(true);
+                        }
+                    } else {
+                        onClick();                    
                     }
                 } else {
                     onClick();
