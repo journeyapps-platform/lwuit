@@ -33,6 +33,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.prefs.Preferences;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -160,18 +161,21 @@ public class HorizontalList extends JPanel {
     public Icon getIconImage(final String current) {
         return new Icon() {
             public void paintIcon(Component c, Graphics g, int x, int y) {
-                com.sun.lwuit.Image bgImage = (com.sun.lwuit.Image)res.getTheme(current).get("Form.bgImage");
-                if(bgImage != null) {
-                    int[] rgb = bgImage.scaled(getIconWidth(), getIconHeight()).getRGB();
-                    BufferedImage i = new BufferedImage(getIconWidth(), getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-                    i.setRGB(0, 0, getIconWidth(), getIconHeight(), rgb, 0, getIconWidth());
-                    g.drawImage(i, x, y, null);
-                } else {
-                    final String bgColor = (String)res.getTheme(current).get("bgColor");
-                    if(bgColor != null) {
-                        Color col = new Color(Integer.decode("0x" + bgColor));
-                        g.setColor(col);
-                        g.fillRect(x, y, getIconWidth(), getIconHeight());
+                Hashtable h = res.getTheme(current);
+                if(h != null) {
+                    com.sun.lwuit.Image bgImage = (com.sun.lwuit.Image)h.get("Form.bgImage");
+                    if(bgImage != null) {
+                        int[] rgb = bgImage.scaled(getIconWidth(), getIconHeight()).getRGB();
+                        BufferedImage i = new BufferedImage(getIconWidth(), getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+                        i.setRGB(0, 0, getIconWidth(), getIconHeight(), rgb, 0, getIconWidth());
+                        g.drawImage(i, x, y, null);
+                    } else {
+                        final String bgColor = (String)res.getTheme(current).get("bgColor");
+                        if(bgColor != null) {
+                            Color col = new Color(Integer.decode("0x" + bgColor));
+                            g.setColor(col);
+                            g.fillRect(x, y, getIconWidth(), getIconHeight());
+                        }
                     }
                 }
             }
