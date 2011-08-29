@@ -274,35 +274,18 @@ public class Tabs extends Container {
         this.tabPlacement = tabPlacement;
         removeComponent(tabsContainer);
 
-        if (tabPlacement == TOP || tabPlacement == BOTTOM) {
-            if(tabsFillRows) {
-                FlowLayout f = new FlowLayout();
-                f.setFillRows(true);
-                tabsContainer.setLayout(f);
-            } else {
-                if(tabsGridLayout) {
-                    tabsContainer.setLayout(new GridLayout(1, Math.max(1 ,getTabCount())));
-                } else {
-                    tabsContainer.setLayout(new BoxLayout(BoxLayout.X_AXIS));
-                }
-            }
-            tabsContainer.setScrollableX(true);
-            tabsContainer.setScrollableY(false);
-            if (tabPlacement == TOP) {
-                super.addComponent(BorderLayout.NORTH, tabsContainer);
-            } else if (tabPlacement == BOTTOM) {
-                super.addComponent(BorderLayout.SOUTH, tabsContainer);
-            }
-        } else {// LEFT Or RIGHT
-            tabsContainer.setLayout(new BoxLayout(BoxLayout.Y_AXIS));
-            tabsContainer.setScrollableX(false);
-            tabsContainer.setScrollableY(true);
-            if (tabPlacement == LEFT) {
-                super.addComponent(BorderLayout.WEST, tabsContainer);
-            } else {// RIGHT
-                super.addComponent(BorderLayout.EAST, tabsContainer);
-            }
+        setTabsLayout(tabPlacement);
+
+        if (tabPlacement == TOP) {
+            super.addComponent(BorderLayout.NORTH, tabsContainer);
+        } else if (tabPlacement == BOTTOM) {
+            super.addComponent(BorderLayout.SOUTH, tabsContainer);
+        } else if (tabPlacement == LEFT) {
+            super.addComponent(BorderLayout.WEST, tabsContainer);
+        } else {// RIGHT
+            super.addComponent(BorderLayout.EAST, tabsContainer);
         }
+
         initTabsFocus();
 
         tabsContainer.setShouldCalcPreferredSize(true);
@@ -463,10 +446,7 @@ public class Tabs extends Container {
 
         tabsContainer.addComponent(index, b);
         contentPane.addComponent(index, component);
-        if(tabsGridLayout) {
-            tabsContainer.setLayout(new GridLayout(1, Math.max(1 ,getTabCount())));
-        }
-
+        setTabsLayout(tabPlacement);
         if (tabsContainer.getComponentCount() == 1) {
             selectedTab = (Button) tabsContainer.getComponentAt(0);
             if (component instanceof Container) {
@@ -553,9 +533,7 @@ public class Tabs extends Container {
         tabsContainer.removeComponent(key);
         Component content = contentPane.getComponentAt(index);
         contentPane.removeComponent(content);
-        if(tabsGridLayout) {
-            tabsContainer.setLayout(new GridLayout(1, Math.max(1 ,getTabCount())));
-        }
+        setTabsLayout(tabPlacement);
     }
 
     /**
@@ -792,6 +770,32 @@ public class Tabs extends Container {
      */
     public void setChangeTabContainerStyleOnFocus(boolean changeTabContainerStyleOnFocus) {
         this.changeTabContainerStyleOnFocus = changeTabContainerStyleOnFocus;
+    }
+
+    private void setTabsLayout(int tabPlacement) {
+        if (tabPlacement == TOP || tabPlacement == BOTTOM) {
+            if(tabsFillRows) {
+                FlowLayout f = new FlowLayout();
+                f.setFillRows(true);
+                tabsContainer.setLayout(f);
+            } else {
+                if(tabsGridLayout) {
+                    tabsContainer.setLayout(new GridLayout(1, Math.max(1 ,getTabCount())));
+                } else {
+                    tabsContainer.setLayout(new BoxLayout(BoxLayout.X_AXIS));
+                }
+            }
+            tabsContainer.setScrollableX(true);
+            tabsContainer.setScrollableY(false);
+        } else {// LEFT Or RIGHT
+                if(tabsGridLayout) {
+                    tabsContainer.setLayout(new GridLayout(Math.max(1 ,getTabCount()), 1));
+                } else {
+                    tabsContainer.setLayout(new BoxLayout(BoxLayout.Y_AXIS));
+                }
+            tabsContainer.setScrollableX(false);
+            tabsContainer.setScrollableY(true);
+        }
     }
 
 
