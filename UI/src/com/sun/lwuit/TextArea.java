@@ -926,6 +926,13 @@ public class TextArea extends Component {
         UIManager.getInstance().getLookAndFeel().drawTextArea(g, this);
         paintHint(g);
     }
+
+    void paintHint(Graphics g) {
+        if(Display.getInstance().isTextEditing()) {
+            return;
+        }
+        super.paintHint(g);
+    }
     
     /**
      * @inheritDoc

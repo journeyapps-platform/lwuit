@@ -1220,6 +1220,10 @@ public final class Display {
         impl.editString(cmp, maxSize, constraint, text, initiatingKeycode);
         editingText = false;
     }
+    
+    boolean isTextEditing() {
+        return editingText;
+    }
 
     /**
      * Minimizes the current application if minimization is supported by the platform (may fail).
