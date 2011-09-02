@@ -1831,7 +1831,19 @@ public class UIBuilder {
      */
     public void reloadForm() {
         Form currentForm = Display.getInstance().getCurrent();
+        Command backCommand = currentForm.getBackCommand(); 
         Form newForm = (Form)createContainer(fetchResourceFile(), currentForm.getName());
+
+        if (backCommand != null) {
+            newForm.setBackCommand(backCommand);
+            for(int iter = 0 ; iter < currentForm.getCommandCount() ; iter++) {
+                if(backCommand == currentForm.getCommand(iter)) {
+                    newForm.addCommand(backCommand, newForm.getCommandCount());
+                    break;
+                }
+            }
+        }
+        
         beforeShow(newForm);
         Transition tin = newForm.getTransitionInAnimator();
         Transition tout = newForm.getTransitionOutAnimator();
