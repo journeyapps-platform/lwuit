@@ -24,6 +24,7 @@
 
 package com.sun.lwuit.resources.editor.editors;
 
+import com.sun.lwuit.EncodedImage;
 import com.sun.lwuit.resources.editor.ResourceEditorView;
 import com.sun.lwuit.util.EditableResources;
 import java.awt.Component;
@@ -36,6 +37,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
@@ -164,6 +167,7 @@ public class ImageMultiEditor extends javax.swing.JPanel {
         componentList = new javax.swing.JList();
         delete = new javax.swing.JButton();
         scale = new javax.swing.JButton();
+        toJpeg = new javax.swing.JButton();
 
         FormListener formListener = new FormListener();
 
@@ -217,6 +221,11 @@ public class ImageMultiEditor extends javax.swing.JPanel {
         scale.setName("scale"); // NOI18N
         scale.addActionListener(formListener);
 
+        toJpeg.setText("To JPEG");
+        toJpeg.setToolTipText("Convert Multi-Image to JPEG");
+        toJpeg.setName("toJpeg"); // NOI18N
+        toJpeg.addActionListener(formListener);
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -235,6 +244,8 @@ public class ImageMultiEditor extends javax.swing.JPanel {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(scale)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(toJpeg)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(type)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(imageName)
@@ -245,9 +256,9 @@ public class ImageMultiEditor extends javax.swing.JPanel {
                     .add(layout.createSequentialGroup()
                         .add(preview, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 518, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)))
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)))
                 .addContainerGap())
-            .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 710, Short.MAX_VALUE)
+            .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1052, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -262,7 +273,8 @@ public class ImageMultiEditor extends javax.swing.JPanel {
                     .add(imageName)
                     .add(zoom, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(imageSize)
-                    .add(scale))
+                    .add(scale)
+                    .add(toJpeg))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                     .add(jScrollPane1)
@@ -288,6 +300,9 @@ public class ImageMultiEditor extends javax.swing.JPanel {
             }
             else if (evt.getSource() == scale) {
                 ImageMultiEditor.this.scaleActionPerformed(evt);
+            }
+            else if (evt.getSource() == toJpeg) {
+                ImageMultiEditor.this.toJpegActionPerformed(evt);
             }
         }
 
@@ -335,6 +350,29 @@ public class ImageMultiEditor extends javax.swing.JPanel {
         res.setMultiImage(name, newImage);
         setImage(newImage);
     }//GEN-LAST:event_scaleActionPerformed
+
+private void toJpegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toJpegActionPerformed
+        int[] dpis = multi.getDpi();
+        com.sun.lwuit.EncodedImage[] images = new com.sun.lwuit.EncodedImage[multi.getInternalImages().length];
+        for(int iter = 0 ; iter < images.length ; iter++) {
+            try {
+                com.sun.lwuit.Image sourceImage = multi.getInternalImages()[iter];
+                BufferedImage buffer = new BufferedImage(sourceImage.getWidth(), sourceImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                buffer.setRGB(0, 0, sourceImage.getWidth(), sourceImage.getHeight(), sourceImage.getRGB(), 0, sourceImage.getWidth());
+                ByteArrayOutputStream bo = new ByteArrayOutputStream();
+                ImageIO.write(buffer, "jpeg", bo);
+                bo.close();
+                images[iter] = EncodedImage.create(bo.toByteArray());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        EditableResources.MultiImage newImage = new EditableResources.MultiImage();
+        newImage.setDpi(dpis);
+        newImage.setInternalImages(images);
+        res.setMultiImage(name, newImage);
+        setImage(newImage);
+}//GEN-LAST:event_toJpegActionPerformed
 
     public static EditableResources.MultiImage scaleMultiImage(int fromDPI, int toDPI, int scaledWidth, int scaledHeight, EditableResources.MultiImage multi) {
         try {
@@ -481,6 +519,7 @@ public class ImageMultiEditor extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel preview;
     private javax.swing.JButton scale;
+    private javax.swing.JButton toJpeg;
     private javax.swing.JLabel type;
     private javax.swing.JSpinner zoom;
     // End of variables declaration//GEN-END:variables

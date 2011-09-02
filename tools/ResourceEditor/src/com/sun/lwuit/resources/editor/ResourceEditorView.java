@@ -51,6 +51,8 @@ import com.sun.lwuit.util.UIBuilder;
 import com.sun.lwuit.util.UIBuilderOverride;
 import java.awt.Component;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.JTree;
 import javax.swing.event.ChangeEvent;
@@ -82,9 +84,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -96,8 +95,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Vector;
 import java.util.prefs.Preferences;
 import java.util.zip.ZipEntry;
@@ -114,7 +111,6 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -694,6 +690,7 @@ public class ResourceEditorView extends FrameView {
         pickMIDlet = new javax.swing.JMenuItem();
         resetToDefault = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JSeparator();
+        livePreview = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         previewMIDlet = new javax.swing.JMenuItem();
         previewNokiaDevice = new javax.swing.JMenuItem();
@@ -1295,6 +1292,11 @@ public class ResourceEditorView extends FrameView {
         jSeparator5.setName("jSeparator5"); // NOI18N
         midletMenu.add(jSeparator5);
 
+        livePreview.setText("Live Preview");
+        livePreview.setName("livePreview"); // NOI18N
+        livePreview.addActionListener(formListener);
+        midletMenu.add(livePreview);
+
         jMenu3.setText("Preview");
         jMenu3.setName("jMenu3"); // NOI18N
 
@@ -1726,9 +1728,16 @@ public class ResourceEditorView extends FrameView {
             else if (evt.getSource() == about) {
                 ResourceEditorView.this.aboutActionPerformed(evt);
             }
+            else if (evt.getSource() == livePreview) {
+                ResourceEditorView.this.livePreviewActionPerformed(evt);
+            }
         }
     }// </editor-fold>//GEN-END:initComponents
 
+    public EditableResources getLoadedResources() {
+        return loadedResources;
+    }
+    
 private void pickMIDletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pickMIDletActionPerformed
     PickMIDlet.showPickMIDletDialog(mainPanel);
 }//GEN-LAST:event_pickMIDletActionPerformed
@@ -2762,9 +2771,14 @@ private static boolean configureNetbeans() {
     if(node != null) {
         Preferences.userNodeForPackage(ResourceEditorView.class).put("lastDir", node);
     }
-    File[] result = showOpenFileChooser("Netbeans Executable", "exe", "App");
+    File[] result = showOpenFileChooser("Netbeans Executable", "exe", "app");
     if(result != null) {
-        Preferences.userNodeForPackage(ResourceEditorView.class).put("netbeansInstall", result[0].getAbsolutePath());
+        if(ResourceEditorApp.IS_MAC) {
+            String p = result[0].getAbsolutePath() + "/Contents/MacOS/netbeans";
+            Preferences.userNodeForPackage(ResourceEditorView.class).put("netbeansInstall", p);
+        } else {
+            Preferences.userNodeForPackage(ResourceEditorView.class).put("netbeansInstall", result[0].getAbsolutePath());
+        }
         return true;
     }
     return false;
@@ -3229,7 +3243,7 @@ private boolean configureOptiPNG() {
     String node = Preferences.userNodeForPackage(ResourceEditorView.class).get("optiPng", null);
     if(node == null) {
         JOptionPane.showMessageDialog(mainPanel, "Please select the OptiPng executable in the following dialog\nOptiPng can be downloaded from http://http://optipng.sourceforge.net/", "Select OptiPNG", JOptionPane.INFORMATION_MESSAGE);
-        File[] result = showOpenFileChooser("OptiPng Executable", "exe", "App");
+        File[] result = showOpenFileChooser("OptiPng Executable", "exe", "app");
         if(result != null) {
             Preferences.userNodeForPackage(ResourceEditorView.class).put("optiPng", result[0].getAbsolutePath());
             return true;
@@ -3247,12 +3261,20 @@ private boolean configureOptiPNG() {
             f.write(img.getImageData());
             f.close();
             Process p = new ProcessBuilder(exe, "-o7", tmp.getAbsolutePath()).redirectErrorStream(true).start();
-            InputStream stream = p.getInputStream();
-            int i = stream.read();
-            while(i > -1) {
-                System.out.print((char)i);
-                i = stream.read();
-            }
+            final InputStream stream = p.getInputStream();
+            new Thread() {
+                public void run() {
+                    try {
+                        int i = stream.read();
+                        while(i > -1) {
+                            System.out.print((char)i);
+                            i = stream.read();
+                        }
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }.start();
             p.waitFor();
             DataInputStream input = new DataInputStream(new FileInputStream(tmp));
             byte[] data = new byte[(int)tmp.length()];
@@ -3320,6 +3342,10 @@ private boolean configureOptiPNG() {
     private void aboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutActionPerformed
         new About(mainPanel);
     }//GEN-LAST:event_aboutActionPerformed
+
+private void livePreviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_livePreviewActionPerformed
+    new LivePreview(mainPanel, this);
+}//GEN-LAST:event_livePreviewActionPerformed
 
     private void buildFilenameMap(File baseDir, Map<String, List<File>> map) {
         File[] f = baseDir.listFiles();
@@ -3938,6 +3964,7 @@ public static void openInIDE(File f, int lineNumber) {
 
             getFrame().setTitle(loadedFile.getName() + " - Resource Editor");
             treeArea.revalidate();
+            LivePreview.updateServer(mainPanel);
             // expand the entire tree
             /*for (int i=0; i<resourceTree.getRowCount(); i++)
                 resourceTree.expandRow(i);*/
@@ -4047,7 +4074,7 @@ public static void openInIDE(File f, int lineNumber) {
                                     false);
                         }
                     }
-
+                    LivePreview.updateServer(mainPanel);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(mainPanel, "Error saving to file: " + ex.toString(), "IO Error", JOptionPane.ERROR_MESSAGE);
@@ -4718,6 +4745,7 @@ public static void openInIDE(File f, int lineNumber) {
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JMenuItem launchOptiPng;
     private javax.swing.JTextArea license;
+    private javax.swing.JMenuItem livePreview;
     private javax.swing.JScrollPane localizationScroll;
     private javax.swing.JMenu lookAndFeelMenu;
     private javax.swing.JScrollPane mainImages;
