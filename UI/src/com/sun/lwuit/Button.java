@@ -165,7 +165,17 @@ public class Button extends Label {
         super.focusLostInternal();
         state = STATE_DEFAULT;
     }
-    
+
+    public void pointerDraggedEnter(int x, int y) {
+        super.pointerDraggedEnter(x, y);
+    }
+
+    public void pointerDraggedLeave(int x, int y) {
+        super.pointerDraggedLeave(x, y);
+        state = STATE_DEFAULT;
+        repaint();
+    }
+
     /**
      * Returns the button state
      * 

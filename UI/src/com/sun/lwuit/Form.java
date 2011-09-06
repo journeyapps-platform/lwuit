@@ -71,6 +71,9 @@ public class Form extends Container {
     private Label title = new Label("", "Title");
     private MenuBar menuBar;
     private Component dragged;
+
+    private Component dragOver;
+    
     /**
      * Indicates whether lists and containers should scroll only via focus and thus "jump" when
      * moving to a larger component as was the case in older versions of LWUIT.
@@ -1684,6 +1687,7 @@ public class Form extends Container {
             Component cmp = menuBar.getComponentAt(x, y);
             if (cmp != null && cmp.isEnabled()) {
                 cmp.pointerPressed(x, y);
+                setDraggedOver(cmp, x, y, true);
                 tactileTouchVibe(x, y, cmp);
             }
             return;
@@ -1691,6 +1695,7 @@ public class Form extends Container {
 
         if (y >= contentPane.getY()) {
             Component cmp = contentPane.getComponentAt(x, y);
+            setDraggedOver(cmp, x, y, true);
             if(cmp != null) {
                 cmp.initDragAndDrop(x, y);
                 if(cmp.hasLead) {
@@ -1793,6 +1798,17 @@ public class Form extends Container {
         }
     }
 
+    private void setDraggedOver(Component cmp, int x, int y, boolean triggerLeave) {
+        if(dragOver != null && dragOver != cmp && triggerLeave) {
+            dragOver.pointerDraggedLeave(x, y);
+        }
+        
+        if(cmp != null && cmp != dragOver) {
+            cmp.pointerDraggedEnter(x, y);
+        }
+        dragOver = cmp;
+    }
+
     /**
      * @inheritDoc
      */
@@ -1807,12 +1823,21 @@ public class Form extends Container {
         }
 
         Component cmp = contentPane.getComponentAt(x, y);
+        if(cmp == null) {
+            if (menuBar.contains(x, y)) {
+                cmp = menuBar.getComponentAt(x, y);
+            }
+        }
+
         if (cmp != null) {
             if (cmp.isFocusable() && cmp.isEnabled()) {
                 setFocused(cmp);
             }
+            setDraggedOver(cmp, x, y, true);
             cmp.pointerDragged(x, y);
             cmp.repaint();
+        } else {
+            setDraggedOver(null, x, y, true);
         }
     }
 
@@ -1913,6 +1938,7 @@ public class Form extends Container {
             //soft button.
             if (menuBar.contains(x, y)) {
                 Component cmp = menuBar.getComponentAt(x, y);
+                setDraggedOver(null, x, y, cmp != dragOver);
                 if (cmp != null && cmp.isEnabled()) {
                     cmp.pointerReleased(x, y);
                 }
@@ -1931,12 +1957,14 @@ public class Form extends Container {
                         }
                         leadParent.repaint();
                         setFocused(leadParent);
+                        setDraggedOver(null, x, y, cmp.getLeadComponent() != dragOver);
                         cmp.getLeadComponent().pointerReleased(x, y);
                     } else {
                         if(cmp.isEnabled()) {
                             if (cmp.isFocusable()) {
                                 setFocused(cmp);
                             }
+                            setDraggedOver(null, x, y, cmp != dragOver);
                             cmp.pointerReleased(x, y);
                         }
                     }

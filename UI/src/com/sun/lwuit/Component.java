@@ -1986,6 +1986,26 @@ public class Component implements Animation, StyleListener {
         }
     }
 
+    /**
+     * Called when the pointer is dragged onto the component for the first time.
+     *
+     * @param x the pointer x coordinate
+     * @param y the pointer y coordinate
+     */
+    public void pointerDraggedEnter(int x, int y) {
+        
+    }
+
+    /**
+     * Called when the pointer is dragged out of the component for the first time.
+     *
+     * @param x the pointer x coordinate
+     * @param y the pointer y coordinate
+     */
+    public void pointerDraggedLeave(int x, int y) {
+        
+    }
+
     private void initScrollMotion() {
         // the component might not be registered for animation if it started off 
         // as smaller than the screen and grew (e.g. by adding components to the container
