@@ -91,6 +91,12 @@ public class Style {
      */
     public static final String BACKGROUND_GRADIENT = "bgGradient";
 
+
+    /**
+     * Background attribute name for the theme hashtable
+     */
+    public static final String BACKGROUND_DUAL_GRADIENT = "bgDualGradient";
+
     /**
      * Font attribute name for the theme hashtable 
      */
@@ -262,6 +268,17 @@ public class Style {
      */
     public static final byte BACKGROUND_GRADIENT_RADIAL = (byte)8;
 
+
+    /**
+     * Indicates the background for the style would use a linear gradient
+     */
+    public static final byte BACKGROUND_GRADIENT_DUAL_LINEAR_VERTICAL = (byte)9;
+
+    /**
+     * Indicates the background for the style would use a linear gradient
+     */
+    public static final byte BACKGROUND_GRADIENT_DUAL_LINEAR_HORIZONTAL = (byte)10;
+
     /**
      * Indicates the background alignment for use in tiling or aligned images
      */
@@ -354,6 +371,7 @@ public class Style {
     private byte backgroundType = BACKGROUND_IMAGE_SCALED;
     private byte backgroundAlignment = BACKGROUND_IMAGE_ALIGN_TOP;
     private Object[] backgroundGradient;
+    private Object[] dualBackgroundGradient;
 
     private Border border = null;
 
@@ -456,6 +474,10 @@ public class Style {
         if(style.backgroundGradient != null) {
             backgroundGradient = new Object[style.backgroundGradient.length];
             System.arraycopy(style.backgroundGradient, 0, backgroundGradient, 0, backgroundGradient.length);
+        }
+        if(style.dualBackgroundGradient != null) {
+            dualBackgroundGradient = new Object[style.dualBackgroundGradient.length];
+            System.arraycopy(style.dualBackgroundGradient, 0, dualBackgroundGradient, 0, dualBackgroundGradient.length);
         }
     }
 
@@ -642,6 +664,43 @@ public class Style {
     public byte getBackgroundAlignment() {
         return backgroundAlignment;
     }
+
+    public int getDualGradientColor1() {
+        if(dualBackgroundGradient != null) {
+            return ((Integer)dualBackgroundGradient[1]).intValue();
+        }
+        return 0xffffff;
+    }
+
+    public int getDualGradientColor2() {
+        if(dualBackgroundGradient != null) {
+            return ((Integer)dualBackgroundGradient[2]).intValue();
+        }
+        return 0xffffff;
+    }
+
+    public int getDualGradientColor3() {
+        if(dualBackgroundGradient != null) {
+            return ((Integer)dualBackgroundGradient[3]).intValue();
+        }
+        return 0xffffff;
+    }
+
+    public int getDualGradientColor4() {
+        if(dualBackgroundGradient != null) {
+            return ((Integer)dualBackgroundGradient[4]).intValue();
+        }
+        return 0xffffff;
+    }
+
+    public float getDualGradientSplit() {
+        if(dualBackgroundGradient != null) {
+            return ((Float)dualBackgroundGradient[0]).floatValue();
+        }
+        return 0.5f;
+    }
+
+
 
     /**
      * Start color for the radial/linear gradient
@@ -1348,6 +1407,13 @@ public class Style {
     void setBackgroundGradient(Object[] backgroundGradient) {
         this.backgroundGradient = backgroundGradient;
     }
+    /**
+     * Internal use background gradient setter
+     */
+    void setDualBackgroundGradient(Object[] backgroundGradient) {
+        this.dualBackgroundGradient = backgroundGradient;
+    }
+
 
     /**
      * Sets the background color for the component

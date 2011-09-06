@@ -841,6 +841,7 @@ public class UIManager {
             Byte backgroundType = (Byte) themeProps.get(id + Style.BACKGROUND_TYPE);
             Byte backgroundAlignment = (Byte) themeProps.get(id + Style.BACKGROUND_ALIGNMENT);
             Object[] backgroundGradient = (Object[]) themeProps.get(id + Style.BACKGROUND_GRADIENT);
+            Object[] dualBackgroundGradient = (Object[]) themeProps.get(id + Style.BACKGROUND_DUAL_GRADIENT);
             byte[] paddingUnit = (byte[])themeProps.get(id + Style.PADDING_UNIT);
             byte[] marginUnit = (byte[])themeProps.get(id + Style.MARGIN_UNIT);
 
@@ -895,6 +896,10 @@ public class UIManager {
                 }
                 style.setBackgroundGradient(backgroundGradient);
             }
+            if (dualBackgroundGradient != null) {
+                style.setDualBackgroundGradient(dualBackgroundGradient);
+            }
+
             if (bgImage != null) {
                 Image im = null;
                 if (bgImage instanceof String) {
