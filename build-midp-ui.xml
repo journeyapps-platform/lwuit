@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<project name="MIDP UI" default="jar" basedir=".">
+    <description>Builds, tests, and runs the project .</description>
+
+    <property name="wtk.home" value="/opt/wtk252"/>
+
+    <!-- All the J2ME extensions we need to build the application -->
+    <path id="lib.jsrs">
+        <!-- Although we do not use all of these JSR's, they are referenced by lwuit -->
+        <path location="${wtk.home}/lib/cldcapi11.jar"/>
+        <path location="${wtk.home}/lib/midpapi21.jar"/>
+        <path location="${wtk.home}/lib/jsr75.jar"/>
+        <path location="${wtk.home}/lib/jsr082.jar"/>
+        <path location="${wtk.home}/lib/jsr179.jar"/>
+        <path location="${wtk.home}/lib/jsr184.jar"/>
+        <path location="${wtk.home}/lib/jsr226.jar"/>
+        <path location="${wtk.home}/lib/wma11.jar"/>
+        <path location="${wtk.home}/lib/mmapi.jar"/>
+    </path>
+
+    <target name="clean">
+        <delete failonerror="false" dir="build"/>
+    </target>
+    
+    <target name="compile">
+        <mkdir dir="build"/>
+        <mkdir dir="build/classes"/>
+
+        <javac srcdir="UI/src"
+               destdir="build/classes"
+               includeantruntime="false"
+               debug="true" debuglevel="lines,vars,source">
+
+        </javac>
+        
+        <javac srcdir="Ports/MIDP/UI/src"
+               destdir="build/classes"
+               includeantruntime="false"
+               debug="true" debuglevel="lines,vars,source"
+                classpathref="lib.jsrs">
+
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar destfile="build/lwuit.jar"
+             basedir="build/classes"/>
+    </target>
+
+</project>
