@@ -3620,6 +3620,20 @@ public class Component implements Animation, StyleListener {
                     g.fillLinearGradient(s.getBackgroundGradientStartColor(), s.getBackgroundGradientEndColor(),
                             x, y, width, height, false);
                     return;
+                case Style.BACKGROUND_GRADIENT_DUAL_LINEAR_HORIZONTAL:
+                    int splitH = (int)(width * s.getDualGradientSplit());
+                    g.fillLinearGradient(s.getDualGradientColor1(), s.getDualGradientColor2(),
+                            x, y, splitH, height, true);
+                    g.fillLinearGradient(s.getDualGradientColor3(), s.getDualGradientColor4(),
+                            x + splitH, y, width - splitH, height, true);
+                    return;
+                case Style.BACKGROUND_GRADIENT_DUAL_LINEAR_VERTICAL:
+                    int splitV = (int)(height * s.getDualGradientSplit());
+                    g.fillLinearGradient(s.getDualGradientColor1(), s.getDualGradientColor2(),
+                            x, y, width, splitV, false);
+                    g.fillLinearGradient(s.getDualGradientColor3(), s.getDualGradientColor4(),
+                            x, y + splitV, width, height - splitV, false);
+                    return;
                 case Style.BACKGROUND_GRADIENT_RADIAL:
                     if(isInitialized()) {
                         if(radialCache == null || cachedRadialBackgroundGradientStartColor != s.getBackgroundGradientStartColor() ||
