@@ -2,12 +2,16 @@
 <!-- You may freely edit this file. See commented blocks below for -->
 <!-- some examples of how to customize the build. -->
 <!-- (If you delete it and reopen the project it will be recreated.) -->
-<project name="MIDP UI" default="jar" basedir=".">
+<project name="MIDP UI" default="jar" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
     <description>Builds, tests, and runs the project .</description>
-
+    
+    <path id="maven-ant-tasks.classpath" path="maven-ant-tasks-2.1.3.jar" />
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+           uri="antlib:org.apache.maven.artifact.ant"
+           classpathref="maven-ant-tasks.classpath" />
 
     <property name="wtk.home" value="/opt/wtk252"/>
-    <taskdef resource="antenna.properties" classpath="/path/to/antenna-bin-1.2.1-beta.jar"/>
+    <taskdef resource="antenna.properties" classpath="antenna-bin-1.2.1-beta.jar"/>
     <property name="wtk.cldc.version" value="1.1" />
     <property name="wtk.midp.version" value="2.1" />
 
@@ -57,4 +61,16 @@
              basedir="build/classes"/>
     </target>
 
+    <target name="maven" depends="jar">
+        <artifact:pom id="lwuit" file="pom.xml" />
+        <jar jarfile="build/lwuit-src.jar">
+            <fileset dir="UI/src"/>
+            <fileset dir="Ports/MIDP/UI/src"/>
+        </jar>
+
+        <artifact:install file="build/lwuit.jar">
+            <artifact:pom refid="lwuit"/>
+            <artifact:attach file="build/lwuit-src.jar" type="jar" classifier="sources"/>
+        </artifact:install>
+    </target>
 </project>
